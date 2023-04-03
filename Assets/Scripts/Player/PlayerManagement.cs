@@ -1,10 +1,13 @@
+using System;
+using Events;
 using Models;
 using Photon.Pun;
+using SimpleEventBus.Disposables;
 using UnityEngine;
 
 namespace Player
 {
-    public class PlayerManagement : MonoBehaviour
+    public class PlayerManagement : MonoBehaviour, IDisposable
     {
         [SerializeField] private PhotonView _photonView;
         [SerializeField] private PlayerController _playerController;
@@ -13,11 +16,21 @@ namespace Player
         [SerializeField] private float _rotationSpeed = 2f;
 
         private FixedJoystick _joystick;
+        private CompositeDisposable _subscriptions;
 
         public void Initialize(PlayerModel playerModel, FixedJoystick joystick)
         {
             _playerController.Initialize(playerModel, _photonView);
             _joystick = joystick;
+            _subscriptions = new CompositeDisposable
+            {
+                EventStreams.Game.Subscribe<ShootButtonOnClickedEvent>(Shoot)
+            };
+        }
+        
+        public void Dispose()
+        {
+            _subscriptions?.Dispose();
         }
 
         private void Update()
@@ -35,11 +48,6 @@ namespace Player
                 var x = _joystick.Horizontal;
                 var y = _joystick.Vertical;
                 Move(x, y);
-
-                if (Input.touchCount > 0)
-                {
-                    _playerController.Shoot();
-                }
             }
         }
 
@@ -50,6 +58,11 @@ namespace Player
         
             transform.Translate(Vector3.up * moveStep * y);
             transform.Rotate(new Vector3(0, 0, x) * -90 * rotationStep);
+        }
+
+        private void Shoot(ShootButtonOnClickedEvent eventData)
+        {
+            _playerController.Shoot();
         }
     }
 }
