@@ -2,7 +2,7 @@ namespace GlobalConstants
 {
     public static class Tags
     {
-        public static string COIN = "Coin";
-        public static string BULLET = "Bullet";
+        public const string COIN = "Coin";
+        public const string BULLET = "Bullet";
     }
 }
