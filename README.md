@@ -30,7 +30,7 @@
   + **4.** - Photon - для сетевого взаимодействия игроков.
 
 ### **Реализация:** 
-Ссылка
+https://drive.google.com/file/d/1tgdU9URkGiaoXDHMjPxOkjWzaqUBslwX/view?usp=sharing
 
 + **1. Подключение к серверу:**
 
